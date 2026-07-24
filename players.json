@@ -1,0 +1,19 @@
+[
+  { "name": "Matt Ruess",      "ghin": "10189718", "club": "Youche Country Club", "hi": 4.8,  "course_handicap": 5  },
+  { "name": "Chris Blaylock",  "ghin": "10189771", "club": "Youche Country Club", "hi": 11.5, "course_handicap": 12 },
+  { "name": "Dan Sherman",     "ghin": "10189450", "club": "Youche Country Club", "hi": 8.1,  "course_handicap": 9  },
+  { "name": "David Franklin",  "ghin": "10189789", "club": "Youche Country Club", "hi": 7.2,  "course_handicap": 7  },
+  { "name": "Joel Hanger",     "ghin": "10189630", "club": "Youche Country Club", "hi": 1.8,  "course_handicap": 1  },
+  { "name": "Jeff Limbaugh",   "ghin": "11401818", "club": "Youche Country Club", "hi": 3.9,  "course_handicap": 4  },
+  { "name": "Mike Bauner",     "ghin": "3193186",  "club": "Youche Country Club", "hi": 4.3,  "course_handicap": 4  },
+  { "name": "Kyle Bauner",     "ghin": "12981287", "club": "Youche Country Club", "hi": 11.0, "course_handicap": 12 },
+  { "name": "Cole Mendez",     "ghin": "13418697", "club": "Youche Country Club", "hi": 36.4, "course_handicap": 40 },
+  { "name": "Kevin Livesay",   "ghin": "10288717", "club": "Youche Country Club", "hi": 9.8,  "course_handicap": 10 },
+  { "name": "Kevin Babcock",   "ghin": "10189777", "club": "Youche Country Club", "hi": 5.3,  "course_handicap": 5  },
+  { "name": "Scott Yoder",     "ghin": "11135860", "club": "Youche Country Club", "hi": 12.4, "course_handicap": 13 },
+  { "name": "Parke Callham",   "ghin": "11837227", "club": "Youche Country Club", "hi": 5.6,  "course_handicap": 6  },
+  { "name": "Robert Scott Jr", "ghin": "10189703", "club": "Youche Country Club", "hi": 20.9, "course_handicap": 23 },
+  { "name": "Sean Granger",    "ghin": "10193174", "club": "Youche Country Club", "hi": 17.8, "course_handicap": 19 },
+  { "name": "Matt Bruder",     "ghin": "10640059", "club": "Youche Country Club", "hi": 13.9, "course_handicap": 15 },
+  { "name": "Matt Mosak",      "ghin": "11254357", "club": "Youche Country Club", "hi": 9.9,  "course_handicap": 11 }
+]

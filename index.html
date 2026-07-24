@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saturday Game — Youche CC</title>
+<style>
+/* ── Tokens ─────────────────────────────────────────────────────────────── */
+:root {
+  --ground:    #F4F6F1;
+  --surface:   #FFFFFF;
+  --row-alt:   #EBF0E6;
+  --border:    #C8D4BE;
+  --text:      #192318;
+  --text-2:    #4A5E44;
+  --accent:    #1E5C1E;
+  --accent-lt: #1E5C1E;
+  --sage:      #8BAA7A;
+  --flag-bg:   #FFF8E6;
+  --flag-bd:   #D4AA40;
+  --flag-txt:  #6B4F00;
+  --err-bg:    #FFF0EE;
+  --err-bd:    #C0392B;
+  --err-txt:   #7A1C14;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground:    #111A11;
+    --surface:   #182118;
+    --row-alt:   #1E2A1E;
+    --border:    #2E3E2E;
+    --text:      #DDE8D5;
+    --text-2:    #849C7A;
+    --accent:    #5DA85D;
+    --accent-lt: #74C074;
+    --sage:      #607A55;
+    --flag-bg:   #2A2210;
+    --flag-bd:   #8C7020;
+    --flag-txt:  #D4AA40;
+    --err-bg:    #2A1010;
+    --err-bd:    #8C2020;
+    --err-txt:   #E07070;
+  }
+}
+:root[data-theme="light"] {
+  --ground:    #F4F6F1;
+  --surface:   #FFFFFF;
+  --row-alt:   #EBF0E6;
+  --border:    #C8D4BE;
+  --text:      #192318;
+  --text-2:    #4A5E44;
+  --accent:    #1E5C1E;
+  --accent-lt: #1E5C1E;
+  --sage:      #8BAA7A;
+  --flag-bg:   #FFF8E6;
+  --flag-bd:   #D4AA40;
+  --flag-txt:  #6B4F00;
+  --err-bg:    #FFF0EE;
+  --err-bd:    #C0392B;
+  --err-txt:   #7A1C14;
+}
+:root[data-theme="dark"] {
+  --ground:    #111A11;
+  --surface:   #182118;
+  --row-alt:   #1E2A1E;
+  --border:    #2E3E2E;
+  --text:      #DDE8D5;
+  --text-2:    #849C7A;
+  --accent:    #5DA85D;
+  --accent-lt: #74C074;
+  --sage:      #607A55;
+  --flag-bg:   #2A2210;
+  --flag-bd:   #8C7020;
+  --flag-txt:  #D4AA40;
+  --err-bg:    #2A1010;
+  --err-bd:    #8C2020;
+  --err-txt:   #E07070;
+}
+
+/* ── Reset ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--ground);
+  color: var(--text);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+  padding: 0 0 3rem;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+.page-header {
+  background: var(--accent);
+  color: #fff;
+  padding: 2rem 2rem 1.75rem;
+}
+
+.header-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: 0.25rem;
+}
+
+.header-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: normal;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.25rem;
+  margin-top: 0.75rem;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+/* ── Controls ───────────────────────────────────────────────────────────── */
+.controls {
+  padding: 1rem 2rem 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sort-label {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.sort-btns { display: flex; gap: 0.5rem; }
+
+.sort-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text-2);
+  cursor: pointer;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  padding: 0.3em 0.8em;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.sort-btn:hover, .sort-btn:focus-visible {
+  background: var(--row-alt);
+  color: var(--text);
+  outline: none;
+}
+.sort-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.player-count {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-2);
+}
+
+/* ── Table ──────────────────────────────────────────────────────────────── */
+.table-wrap {
+  padding: 0.5rem 2rem 0;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+thead th {
+  background: var(--surface);
+  border-bottom: 2px solid var(--accent);
+  color: var(--text-2);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 0.65rem 1rem;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+thead th.num { text-align: right; }
+
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:nth-child(even) { background: var(--row-alt); }
+tbody tr:hover { background: color-mix(in srgb, var(--accent) 8%, var(--ground)); }
+
+tbody td {
+  padding: 0.7rem 1rem;
+  vertical-align: middle;
+}
+td.num { text-align: right; }
+
+.rank { color: var(--text-2); font-size: 12px; width: 2.5rem; }
+
+.player-name { font-size: 15px; font-weight: 500; }
+
+.ghin-num { color: var(--text-2); font-size: 12px; }
+
+.hi-value { font-weight: 600; }
+
+.ch-value {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--accent-lt);
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+.footer {
+  margin-top: 2rem;
+  padding: 1rem 2rem 0;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 2rem;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .page-header, .controls, .table-wrap, .footer { padding-left: 1rem; padding-right: 1rem; }
+  .ghin-col { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <p class="header-eyebrow">Youche Country Club &nbsp;·&nbsp; White Tees</p>
+  <h1 class="header-title">Saturday Game</h1>
+  <div class="header-meta">
+    <span>July 26, 2026</span>
+    <span>&nbsp;|&nbsp; Rating 70.4</span>
+    <span>&nbsp;|&nbsp; Slope 127</span>
+    <span>&nbsp;|&nbsp; Par 71</span>
+  </div>
+</header>
+
+<div class="controls">
+  <span class="sort-label">Sort by</span>
+  <div class="sort-btns">
+    <button class="sort-btn active" onclick="sortTable('hcp', this)">Handicap</button>
+    <button class="sort-btn" onclick="sortTable('name', this)">Name</button>
+    <button class="sort-btn" onclick="sortTable('hi', this)">Index</button>
+  </div>
+  <span class="player-count">17 players</span>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:2.5rem">#</th>
+        <th>Player</th>
+        <th class="ghin-col">GHIN</th>
+        <th class="num">HI</th>
+        <th class="num">Course HC</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<footer class="footer">
+  <span>Course HC = round(HI &times; 127&frasl;113 + (70.4 &minus; 71))</span>
+  <span>Source: GHIN API &nbsp;&middot;&nbsp; Fetched July 24, 2026</span>
+</footer>
+
+<script>
+const PLAYERS = [
+  { name: "Matt Ruess",      ghin: "10189718", hi:  4.8, hcp:  5 },
+  { name: "Chris Blaylock",  ghin: "10189771", hi: 11.5, hcp: 12 },
+  { name: "Dan Sherman",     ghin: "10189450", hi:  8.1, hcp:  9 },
+  { name: "David Franklin",  ghin: "10189789", hi:  7.2, hcp:  7 },
+  { name: "Joel Hanger",     ghin: "10189630", hi:  1.8, hcp:  1 },
+  { name: "Jeff Limbaugh",   ghin: "11401818", hi:  3.9, hcp:  4 },
+  { name: "Mike Bauner",     ghin: "3193186",  hi:  4.3, hcp:  4 },
+  { name: "Kyle Bauner",     ghin: "12981287", hi: 11.0, hcp: 12 },
+  { name: "Cole Mendez",     ghin: "13418697", hi: 36.4, hcp: 40 },
+  { name: "Kevin Livesay",   ghin: "10288717", hi:  9.8, hcp: 10 },
+  { name: "Kevin Babcock",   ghin: "10189777", hi:  5.3, hcp:  5 },
+  { name: "Scott Yoder",     ghin: "11135860", hi: 12.4, hcp: 13 },
+  { name: "Parke Callham",   ghin: "11837227", hi:  5.6, hcp:  6 },
+  { name: "Robert Scott Jr", ghin: "10189703", hi: 20.9, hcp: 23 },
+  { name: "Sean Granger",    ghin: "10193174", hi: 17.8, hcp: 19 },
+  { name: "Matt Bruder",     ghin: "10640059", hi: 13.9, hcp: 15 },
+  { name: "Matt Mosak",      ghin: "11254357", hi:  9.9, hcp: 11 },
+];
+
+let currentSort = 'hcp';
+
+function sortTable(by, btn) {
+  currentSort = by;
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function render() {
+  const sorted = [...PLAYERS].sort((a, b) => {
+    if (currentSort === 'hcp')  return a.hcp - b.hcp;
+    if (currentSort === 'hi')   return a.hi  - b.hi;
+    if (currentSort === 'name') return a.name.localeCompare(b.name);
+    return 0;
+  });
+
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  sorted.forEach((p, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="rank">${i + 1}</td>
+      <td class="player-name">${p.name}</td>
+      <td class="ghin-col ghin-num">${p.ghin}</td>
+      <td class="num hi-value">${p.hi.toFixed(1)}</td>
+      <td class="num ch-value">${p.hcp}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+render();
+</script>
+</body>
+</html>
