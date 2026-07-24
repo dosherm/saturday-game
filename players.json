@@ -8,7 +8,7 @@
   { "name": "Kyle Bauner",     "ghin": "12981287", "club": "Youche Country Club", "hi": 11.0, "course_handicap": 12, "confirmed": true  },
   { "name": "Hunter Smith",    "ghin": "12270584", "club": "Youche Country Club", "hi": 4.8,  "course_handicap": 5,  "confirmed": true  },
   { "name": "Kevin Livesay",   "ghin": "10288717", "club": "Youche Country Club", "hi": 9.8,  "course_handicap": 10, "confirmed": true  },
-  { "name": "Kevin Babcock",   "ghin": "10189777", "club": "Youche Country Club", "hi": 5.3,  "course_handicap": 5,  "confirmed": false },
+  { "name": "Kevin Babcock",   "ghin": "10189777", "club": "Youche Country Club", "hi": 5.3,  "course_handicap": 5,  "confirmed": true  },
   { "name": "Scott Yoder",     "ghin": "11135860", "club": "Youche Country Club", "hi": 12.4, "course_handicap": 13, "confirmed": true  },
   { "name": "Parke Callham",   "ghin": "11837227", "club": "Youche Country Club", "hi": 5.6,  "course_handicap": 6,  "confirmed": true  },
   { "name": "Robert Scott Jr", "ghin": "10189703", "club": "Youche Country Club", "hi": 20.9, "course_handicap": 23, "confirmed": true  },
