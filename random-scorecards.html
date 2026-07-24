@@ -277,15 +277,13 @@ td.tot .dots { background: rgba(30,92,30,0.1); }
 
 <div class="page-header">
   <a href="index.html">← Saturday Game roster</a>
-  <h1>Random Pairings</h1>
+  <h1>Team Pairings</h1>
   <p>Youche Country Club — White Tees &nbsp;·&nbsp; July 26, 2026 &nbsp;·&nbsp; Rating 70.4 · Slope 127 · Par 71</p>
   <div class="header-actions">
-    <button class="btn btn-primary" onclick="reshuffle()">⇄ Reshuffle</button>
     <button class="btn" onclick="window.print()">Print scorecards</button>
   </div>
 </div>
 
-<div class="stats-bar" id="stats-bar"></div>
 <div id="root"></div>
 
 <script>
@@ -310,46 +308,30 @@ const HOLES = [
   { n:18, par:5, yds:580, si:7  },
 ];
 
-const PLAYERS = [
-  { name:'Joel Hanger',     ch:1  },
-  { name:'Mike Bauner',     ch:4  },
-  { name:'Matt Ruess',      ch:5  },
-  { name:'Hunter Smith',    ch:5  },
-  { name:'Kevin Babcock',   ch:5  },
-  { name:'Parke Callham',   ch:6  },
-  { name:'David Franklin',  ch:7  },
-  { name:'Dan Sherman',     ch:9  },
-  { name:'Kevin Livesay',   ch:10 },
-  { name:'Matt Mosak',      ch:11 },
-  { name:'Chris Blaylock',  ch:12 },
-  { name:'Kyle Bauner',     ch:12 },
-  { name:'Scott Yoder',     ch:13 },
-  { name:'Matt Bruder',     ch:15 },
-  { name:'Sean Granger',    ch:19 },
-  { name:'Robert Scott Jr', ch:23 },
+const TEE_GROUPS = [
+  { time: '7:10 AM', teams: [
+    { n:1, p:[{ name:'Matt Ruess',      ch:5  }, { name:'Mike Bauner',     ch:4  }] },
+    { n:2, p:[{ name:'Hunter Smith',    ch:5  }, { name:'Kyle Bauner',     ch:12 }] },
+  ]},
+  { time: '7:20 AM', teams: [
+    { n:3, p:[{ name:'Parke Callham',   ch:6  }, { name:'Kevin Livesay',   ch:10 }] },
+    { n:4, p:[{ name:'Matt Bruder',     ch:15 }, { name:'Matt Mosak',      ch:11 }] },
+  ]},
+  { time: '7:30 AM', teams: [
+    { n:5, p:[{ name:'David Franklin',  ch:7  }, { name:'Chris Blaylock',  ch:12 }] },
+    { n:6, p:[{ name:'Joel Hanger',     ch:1  }, { name:'Scott Yoder',     ch:13 }] },
+  ]},
+  { time: '7:40 AM', teams: [
+    { n:7, p:[{ name:'Dan Sherman',     ch:9  }, { name:'Sean Granger',    ch:19 }] },
+    { n:8, p:[{ name:'Kevin Babcock',   ch:5  }, { name:'Robert Scott Jr', ch:23 }] },
+  ]},
 ];
-
-const HL_STDDEV = 2.56; // high-low baseline
 
 const F = HOLES.slice(0,9), B = HOLES.slice(9);
 const OUT_PAR = F.reduce((s,h)=>s+h.par,0);
 const IN_PAR  = B.reduce((s,h)=>s+h.par,0);
 const OUT_YDS = F.reduce((s,h)=>s+h.yds,0);
 const IN_YDS  = B.reduce((s,h)=>s+h.yds,0);
-
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length-1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i+1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-function stddev(vals) {
-  const mean = vals.reduce((s,v)=>s+v,0) / vals.length;
-  return Math.sqrt(vals.reduce((s,v)=>s+(v-mean)**2,0) / vals.length);
-}
 
 function dots(ch, si) {
   if (ch <= 0) return 0;
@@ -419,61 +401,16 @@ function buildCard(team) {
   </div></div>`;
 }
 
-function reshuffle() {
-  const shuffled = shuffle(PLAYERS);
-  const teams = Array.from({length:8}, (_,i) => ({
-    n: i+1,
-    p: [shuffled[i*2], shuffled[i*2+1]]
-  }));
-
-  const totals = teams.map(t => t.p[0].ch + t.p[1].ch);
-  const mean   = totals.reduce((s,v)=>s+v,0) / totals.length;
-  const sd     = stddev(totals);
-  const range  = Math.max(...totals) - Math.min(...totals);
-  const fairer = sd < HL_STDDEV;
-
-  const TEE_GROUPS = [
-    { time: '7:10 AM', idx: [0, 6] },
-    { time: '7:20 AM', idx: [2, 3] },
-    { time: '7:30 AM', idx: [1, 4] },
-    { time: '7:40 AM', idx: [5, 7] },
-  ];
-  document.getElementById('root').innerHTML = TEE_GROUPS.map(g => {
-    const t0 = teams[g.idx[0]], t1 = teams[g.idx[1]];
-    const who = `Team ${t0.n} &amp; Team ${t1.n}`;
-    return `<div class="tee-group">
-      <div class="tee-divider">
-        <span class="tee-label">Tee Time</span>
-        <span class="tee-time">${g.time}</span>
-        <span class="tee-who">${who}</span>
-      </div>
-      ${buildCard(t0)}${buildCard(t1)}
-    </div>`;
-  }).join('');
-
-  const pill = fairer
-    ? `<span class="fairness-pill pill-good">More balanced than High-Low (σ ${sd.toFixed(2)} vs ${HL_STDDEV})</span>`
-    : `<span class="fairness-pill pill-warn">Less balanced than High-Low (σ ${sd.toFixed(2)} vs ${HL_STDDEV})</span>`;
-
-  document.getElementById('stats-bar').innerHTML = `
-    <div class="stat">
-      <span class="stat-label">Avg combined HC</span>
-      <span class="stat-value">${mean.toFixed(1)}</span>
+document.getElementById('root').innerHTML = TEE_GROUPS.map(g =>
+  `<div class="tee-group">
+    <div class="tee-divider">
+      <span class="tee-label">Tee Time</span>
+      <span class="tee-time">${g.time}</span>
+      <span class="tee-who">Team ${g.teams[0].n} &amp; Team ${g.teams[1].n}</span>
     </div>
-    <div class="stat">
-      <span class="stat-label">Std deviation</span>
-      <span class="stat-value">${sd.toFixed(2)}</span>
-      <span class="stat-compare">High-Low: ${HL_STDDEV}</span>
-    </div>
-    <div class="stat">
-      <span class="stat-label">Range (lo–hi)</span>
-      <span class="stat-value">${Math.min(...totals)}–${Math.max(...totals)}</span>
-      <span class="stat-compare">High-Low: 17–24</span>
-    </div>
-    ${pill}`;
-}
-
-reshuffle();
+    ${buildCard(g.teams[0])}${buildCard(g.teams[1])}
+  </div>`
+).join('');
 </script>
 </body>
 </html>
