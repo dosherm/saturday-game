@@ -137,49 +137,8 @@ body {
 .pill-good { background: var(--good-bg); border-color: var(--good-bd); color: var(--good-txt); }
 .pill-warn { background: var(--warn-bg); border-color: var(--warn-bd); color: var(--warn-txt); }
 
-/* ── Tee time groups ─────────────────────────────────────────────────────── */
-.tee-group { margin-bottom: 0.5rem; }
-
-.tee-header-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 1.5rem;
-  margin: 1.5rem 1.5rem 0;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-bottom: 2px solid var(--accent);
-  border-radius: 3px 3px 0 0;
-}
-.tee-time-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-2);
-}
-.tee-time-val {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.15rem;
-  color: var(--accent);
-  font-weight: normal;
-}
-.tee-sep { color: var(--border); font-size: 1rem; }
-.tee-team-nums {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text);
-}
-.tee-player-names {
-  font-size: 12px;
-  color: var(--text-2);
-  margin-left: 0.25rem;
-}
-
 /* ── Scorecard sections ──────────────────────────────────────────────────── */
-.sc-section { padding: 0 1.5rem 0; }
-.tee-group .sc-section:first-of-type { padding-top: 0; }
-.tee-group .sc-section { padding-top: 0.75rem; }
+.sc-section { padding: 1.25rem 1.5rem 0; }
 
 .sc-card {
   background: var(--surface);
@@ -264,10 +223,8 @@ td.tot .dots { background: rgba(30,92,30,0.1); }
 @media print {
   @page { size: letter landscape; margin: 0.4in; }
   .page-header, .header-actions, .stats-bar { display: none; }
-  .tee-group { page-break-after: always; }
-  .tee-group:last-child { page-break-after: avoid; }
-  .tee-header-bar { margin: 0 0 0.5rem; border-radius: 3px; }
-  .sc-section { padding: 0 0 0.5rem; }
+  .sc-section { padding: 0; page-break-after: always; }
+  .sc-section:last-child { page-break-after: avoid; }
   body { background: white; }
   .sc-card { border: 1px solid #999; }
   .sc-header { background: #1E5C1E !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -430,14 +387,6 @@ function buildCard(team) {
   </div></div>`;
 }
 
-// Fixed tee time groups: [team number, team number] — 1-indexed into the teams array
-const TEE_TIMES = [
-  { time: '7:10 AM', nums: [1, 7] },
-  { time: '7:20 AM', nums: [3, 4] },
-  { time: '7:30 AM', nums: [2, 5] },
-  { time: '7:40 AM', nums: [6, 8] },
-];
-
 function reshuffle() {
   const shuffled = shuffle(PLAYERS);
   const teams = Array.from({length:8}, (_,i) => ({
@@ -448,29 +397,14 @@ function reshuffle() {
   const totals = teams.map(t => t.p[0].ch + t.p[1].ch);
   const mean   = totals.reduce((s,v)=>s+v,0) / totals.length;
   const sd     = stddev(totals);
+  const range  = Math.max(...totals) - Math.min(...totals);
   const fairer = sd < HL_STDDEV;
 
-  const groupsHTML = TEE_TIMES.map(tg => {
-    const groupTeams = tg.nums.map(n => teams[n-1]);
-    const nameSummary = groupTeams.map(t => `${t.p[0].name} &amp; ${t.p[1].name}`).join(' &nbsp;·&nbsp; ');
-    const cards = groupTeams.map(buildCard).join('');
-    return `<div class="tee-group">
-      <div class="tee-header-bar">
-        <span class="tee-time-label">Tee Time</span>
-        <span class="tee-time-val">${tg.time}</span>
-        <span class="tee-sep">·</span>
-        <span class="tee-team-nums">Team ${tg.nums[0]} &amp; Team ${tg.nums[1]}</span>
-        <span class="tee-player-names">${nameSummary}</span>
-      </div>
-      ${cards}
-    </div>`;
-  }).join('');
-
-  document.getElementById('root').innerHTML = groupsHTML;
+  document.getElementById('root').innerHTML = teams.map(buildCard).join('');
 
   const pill = fairer
-    ? `<span class="fairness-pill pill-good">σ ${sd.toFixed(2)} — more balanced than High-Low (${HL_STDDEV})</span>`
-    : `<span class="fairness-pill pill-warn">σ ${sd.toFixed(2)} — less balanced than High-Low (${HL_STDDEV})</span>`;
+    ? `<span class="fairness-pill pill-good">More balanced than High-Low (σ ${sd.toFixed(2)} vs ${HL_STDDEV})</span>`
+    : `<span class="fairness-pill pill-warn">Less balanced than High-Low (σ ${sd.toFixed(2)} vs ${HL_STDDEV})</span>`;
 
   document.getElementById('stats-bar').innerHTML = `
     <div class="stat">
@@ -480,11 +414,12 @@ function reshuffle() {
     <div class="stat">
       <span class="stat-label">Std deviation</span>
       <span class="stat-value">${sd.toFixed(2)}</span>
-      <span class="stat-compare">High-Low baseline: ${HL_STDDEV}</span>
+      <span class="stat-compare">High-Low: ${HL_STDDEV}</span>
     </div>
     <div class="stat">
       <span class="stat-label">Range (lo–hi)</span>
       <span class="stat-value">${Math.min(...totals)}–${Math.max(...totals)}</span>
+      <span class="stat-compare">High-Low: 17–24</span>
     </div>
     ${pill}`;
 }
