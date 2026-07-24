@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saturday Game — Youche CC</title>
+<title>2 Man 20 Ball — Youche CC</title>
 <style>
 /* ── Tokens ─────────────────────────────────────────────────────────────── */
 :root {
@@ -19,6 +19,9 @@
   --conf-txt:    #1A6B1A;
   --pend-bg:     #FFF8E6;
   --pend-txt:    #7A5800;
+  --gold:        #B8860B;
+  --gold-bg:     #FFF8E0;
+  --gold-border: #D4A820;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -34,6 +37,9 @@
     --conf-txt:  #6DCF6D;
     --pend-bg:   #2A2210;
     --pend-txt:  #D4AA40;
+    --gold:      #D4AA40;
+    --gold-bg:   #2A2200;
+    --gold-border:#8A6D00;
   }
 }
 :root[data-theme="light"] {
@@ -42,6 +48,7 @@
   --accent:    #1E5C1E; --accent-lt: #1E5C1E;
   --conf-bg:   #EAF4EA; --conf-txt: #1A6B1A;
   --pend-bg:   #FFF8E6; --pend-txt: #7A5800;
+  --gold:      #B8860B; --gold-bg: #FFF8E0; --gold-border: #D4A820;
 }
 :root[data-theme="dark"] {
   --ground:    #111A11; --surface: #182118; --row-alt: #1E2A1E;
@@ -49,6 +56,7 @@
   --accent:    #5DA85D; --accent-lt: #74C074;
   --conf-bg:   #152515; --conf-txt: #6DCF6D;
   --pend-bg:   #2A2210; --pend-txt: #D4AA40;
+  --gold:      #D4AA40; --gold-bg: #2A2200; --gold-border: #8A6D00;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -78,10 +86,19 @@ body {
 }
 .header-title {
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: normal;
   line-height: 1.1;
   text-wrap: balance;
+  letter-spacing: -0.01em;
+}
+.header-tagline {
+  margin-top: 0.6rem;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.9;
 }
 .header-meta {
   display: flex;
@@ -89,8 +106,141 @@ body {
   gap: 0 1.25rem;
   margin-top: 0.75rem;
   font-size: 13px;
-  opacity: 0.85;
+  opacity: 0.75;
 }
+
+/* ── Prize banner ───────────────────────────────────────────────────────── */
+.prize-banner {
+  background: var(--gold-bg);
+  border-bottom: 2px solid var(--gold-border);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.prize-amount {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: normal;
+  color: var(--gold);
+  line-height: 1;
+  white-space: nowrap;
+}
+.prize-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.prize-main {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.prize-sub {
+  font-size: 0.8rem;
+  color: var(--text-2);
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+.prize-pot {
+  margin-left: auto;
+  text-align: right;
+  white-space: nowrap;
+}
+.prize-pot-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.prize-pot-value {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.5rem;
+  color: var(--gold);
+  line-height: 1.1;
+}
+
+/* ── Rules section ──────────────────────────────────────────────────────── */
+.rules {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 2rem;
+}
+.rules-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  margin-bottom: 0.75rem;
+}
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem 2rem;
+}
+.rule-item {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+.rule-icon {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  margin-top: 0.1rem;
+}
+.rule-text {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.45;
+}
+.rule-text strong { color: var(--accent-lt); }
+
+/* ── Scoring table ──────────────────────────────────────────────────────── */
+.scoring-ref {
+  padding: 0.75rem 2rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.scoring-ref-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.score-pills {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.score-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0.15em 0.65em;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.sp-eagle  { background:#1A3D6B; color:#A8C8FF; }
+.sp-birdie { background:#1E5C1E; color:#A8E8A8; }
+.sp-par    { background:var(--row-alt); color:var(--text-2); }
+.sp-bogey  { background:#5C1E1E; color:#FFA8A8; }
+.sp-double { background:#8B0000; color:#FFCCCC; }
 
 /* ── Controls ───────────────────────────────────────────────────────────── */
 .controls {
@@ -208,8 +358,10 @@ td.center { text-align: center; }
 }
 
 @media (max-width: 640px) {
-  .page-header, .controls, .table-wrap, .footer { padding-left: 1rem; padding-right: 1rem; }
+  .page-header, .prize-banner, .rules, .scoring-ref,
+  .controls, .table-wrap, .footer { padding-left: 1rem; padding-right: 1rem; }
   .ghin-col { display: none; }
+  .prize-pot { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -217,15 +369,61 @@ td.center { text-align: center; }
 <body>
 
 <header class="page-header">
-  <p class="header-eyebrow">Youche Country Club &nbsp;·&nbsp; White Tees</p>
-  <h1 class="header-title">Saturday Game</h1>
+  <p class="header-eyebrow">Youche Country Club &nbsp;·&nbsp; White Tees &nbsp;·&nbsp; July 26, 2026</p>
+  <h1 class="header-title">2 Man 20 Ball</h1>
+  <p class="header-tagline">Winning team takes all &mdash; No participation trophies</p>
   <div class="header-meta">
-    <span>July 26, 2026</span>
-    <span>&nbsp;|&nbsp; Rating 70.4</span>
+    <span>Rating 70.4</span>
     <span>&nbsp;|&nbsp; Slope 127</span>
     <span>&nbsp;|&nbsp; Par 71</span>
+    <span>&nbsp;|&nbsp; Net scoring</span>
   </div>
 </header>
+
+<div class="prize-banner">
+  <div class="prize-amount">$20</div>
+  <div class="prize-details">
+    <div class="prize-main">Per man entry</div>
+    <div class="prize-sub">Winner takes the entire pot &mdash; no splits, no consolations</div>
+  </div>
+  <div class="prize-pot">
+    <div class="prize-pot-label">Total pot</div>
+    <div class="prize-pot-value" id="pot-value">—</div>
+  </div>
+</div>
+
+<div class="rules">
+  <div class="rules-title">How it works</div>
+  <div class="rules-grid">
+    <div class="rule-item">
+      <div class="rule-icon">1</div>
+      <div class="rule-text"><strong>2-man teams</strong> are randomly assigned. Each player plays their own ball with net scoring applied.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-icon">2</div>
+      <div class="rule-text">Each team must select <strong>exactly 10 scores per 9 holes</strong> — 20 total for the round.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-icon">3</div>
+      <div class="rule-text">After finishing a hole, <strong>before teeing off on the next</strong>, decide: take <strong>0, 1, or 2 scores</strong> from that hole.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-icon">4</div>
+      <div class="rule-text">Scores are measured <strong>vs. par</strong>. Lowest total wins. Watch your ball count — you must hit exactly 10 per side.</div>
+    </div>
+  </div>
+</div>
+
+<div class="scoring-ref">
+  <span class="scoring-ref-label">Score ref</span>
+  <div class="score-pills">
+    <span class="score-pill sp-eagle">Eagle &minus;2</span>
+    <span class="score-pill sp-birdie">Birdie &minus;1</span>
+    <span class="score-pill sp-par">Par 0</span>
+    <span class="score-pill sp-bogey">Bogey +1</span>
+    <span class="score-pill sp-double">Double +2</span>
+  </div>
+</div>
 
 <div class="controls">
   <span class="sort-label">Sort by</span>
@@ -280,6 +478,10 @@ const PLAYERS = [
   { name: "Matt Mosak",      ghin: "11254357", hi:  9.9, hcp: 11, confirmed: true  },
 ];
 
+// Live pot counter
+const confirmed = PLAYERS.filter(p => p.confirmed).length;
+document.getElementById('pot-value').textContent = '$' + (confirmed * 20).toLocaleString();
+
 let currentSort = 'hcp';
 
 function sortTable(by, btn) {
@@ -312,8 +514,7 @@ function render() {
     tbody.appendChild(tr);
   });
 
-  const confirmed = PLAYERS.filter(p => p.confirmed).length;
-  const pending   = PLAYERS.length - confirmed;
+  const pending = PLAYERS.length - confirmed;
   document.getElementById('summary').innerHTML =
     `<span class="summary-conf">${confirmed} confirmed</span>
      <span class="summary-pend">${pending} pending</span>`;
