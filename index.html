@@ -7,21 +7,18 @@
 <style>
 /* ── Tokens ─────────────────────────────────────────────────────────────── */
 :root {
-  --ground:    #F4F6F1;
-  --surface:   #FFFFFF;
-  --row-alt:   #EBF0E6;
-  --border:    #C8D4BE;
-  --text:      #192318;
-  --text-2:    #4A5E44;
-  --accent:    #1E5C1E;
-  --accent-lt: #1E5C1E;
-  --sage:      #8BAA7A;
-  --flag-bg:   #FFF8E6;
-  --flag-bd:   #D4AA40;
-  --flag-txt:  #6B4F00;
-  --err-bg:    #FFF0EE;
-  --err-bd:    #C0392B;
-  --err-txt:   #7A1C14;
+  --ground:      #F4F6F1;
+  --surface:     #FFFFFF;
+  --row-alt:     #EBF0E6;
+  --border:      #C8D4BE;
+  --text:        #192318;
+  --text-2:      #4A5E44;
+  --accent:      #1E5C1E;
+  --accent-lt:   #1E5C1E;
+  --conf-bg:     #EAF4EA;
+  --conf-txt:    #1A6B1A;
+  --pend-bg:     #FFF8E6;
+  --pend-txt:    #7A5800;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -33,51 +30,27 @@
     --text-2:    #849C7A;
     --accent:    #5DA85D;
     --accent-lt: #74C074;
-    --sage:      #607A55;
-    --flag-bg:   #2A2210;
-    --flag-bd:   #8C7020;
-    --flag-txt:  #D4AA40;
-    --err-bg:    #2A1010;
-    --err-bd:    #8C2020;
-    --err-txt:   #E07070;
+    --conf-bg:   #152515;
+    --conf-txt:  #6DCF6D;
+    --pend-bg:   #2A2210;
+    --pend-txt:  #D4AA40;
   }
 }
 :root[data-theme="light"] {
-  --ground:    #F4F6F1;
-  --surface:   #FFFFFF;
-  --row-alt:   #EBF0E6;
-  --border:    #C8D4BE;
-  --text:      #192318;
-  --text-2:    #4A5E44;
-  --accent:    #1E5C1E;
-  --accent-lt: #1E5C1E;
-  --sage:      #8BAA7A;
-  --flag-bg:   #FFF8E6;
-  --flag-bd:   #D4AA40;
-  --flag-txt:  #6B4F00;
-  --err-bg:    #FFF0EE;
-  --err-bd:    #C0392B;
-  --err-txt:   #7A1C14;
+  --ground:    #F4F6F1; --surface: #FFFFFF; --row-alt: #EBF0E6;
+  --border:    #C8D4BE; --text: #192318; --text-2: #4A5E44;
+  --accent:    #1E5C1E; --accent-lt: #1E5C1E;
+  --conf-bg:   #EAF4EA; --conf-txt: #1A6B1A;
+  --pend-bg:   #FFF8E6; --pend-txt: #7A5800;
 }
 :root[data-theme="dark"] {
-  --ground:    #111A11;
-  --surface:   #182118;
-  --row-alt:   #1E2A1E;
-  --border:    #2E3E2E;
-  --text:      #DDE8D5;
-  --text-2:    #849C7A;
-  --accent:    #5DA85D;
-  --accent-lt: #74C074;
-  --sage:      #607A55;
-  --flag-bg:   #2A2210;
-  --flag-bd:   #8C7020;
-  --flag-txt:  #D4AA40;
-  --err-bg:    #2A1010;
-  --err-bd:    #8C2020;
-  --err-txt:   #E07070;
+  --ground:    #111A11; --surface: #182118; --row-alt: #1E2A1E;
+  --border:    #2E3E2E; --text: #DDE8D5; --text-2: #849C7A;
+  --accent:    #5DA85D; --accent-lt: #74C074;
+  --conf-bg:   #152515; --conf-txt: #6DCF6D;
+  --pend-bg:   #2A2210; --pend-txt: #D4AA40;
 }
 
-/* ── Reset ──────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -96,7 +69,6 @@ body {
   color: #fff;
   padding: 2rem 2rem 1.75rem;
 }
-
 .header-eyebrow {
   font-size: 11px;
   letter-spacing: 0.12em;
@@ -104,7 +76,6 @@ body {
   opacity: 0.75;
   margin-bottom: 0.25rem;
 }
-
 .header-title {
   font-family: Georgia, 'Times New Roman', serif;
   font-size: clamp(1.6rem, 4vw, 2.4rem);
@@ -112,7 +83,6 @@ body {
   line-height: 1.1;
   text-wrap: balance;
 }
-
 .header-meta {
   display: flex;
   flex-wrap: wrap;
@@ -130,16 +100,13 @@ body {
   gap: 1rem;
   flex-wrap: wrap;
 }
-
 .sort-label {
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-2);
 }
-
 .sort-btns { display: flex; gap: 0.5rem; }
-
 .sort-btn {
   background: transparent;
   border: 1px solid var(--border);
@@ -161,18 +128,18 @@ body {
   border-color: var(--accent);
   color: #fff;
 }
-
-.player-count {
+.summary {
   margin-left: auto;
   font-size: 12px;
   color: var(--text-2);
+  display: flex;
+  gap: 0.75rem;
 }
+.summary-conf  { color: var(--conf-txt); font-weight: 600; }
+.summary-pend  { color: var(--pend-txt); font-weight: 600; }
 
 /* ── Table ──────────────────────────────────────────────────────────────── */
-.table-wrap {
-  padding: 0.5rem 2rem 0;
-  overflow-x: auto;
-}
+.table-wrap { padding: 0.5rem 2rem 0; overflow-x: auto; }
 
 table {
   width: 100%;
@@ -180,7 +147,6 @@ table {
   font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
-
 thead th {
   background: var(--surface);
   border-bottom: 2px solid var(--accent);
@@ -194,29 +160,39 @@ thead th {
   white-space: nowrap;
 }
 thead th.num { text-align: right; }
+thead th.center { text-align: center; }
 
 tbody tr { border-bottom: 1px solid var(--border); }
 tbody tr:nth-child(even) { background: var(--row-alt); }
 tbody tr:hover { background: color-mix(in srgb, var(--accent) 8%, var(--ground)); }
 
-tbody td {
-  padding: 0.7rem 1rem;
-  vertical-align: middle;
-}
-td.num { text-align: right; }
+tbody td { padding: 0.7rem 1rem; vertical-align: middle; }
+td.num    { text-align: right; }
+td.center { text-align: center; }
 
-.rank { color: var(--text-2); font-size: 12px; width: 2.5rem; }
+.rank         { color: var(--text-2); font-size: 12px; width: 2.5rem; }
+.player-name  { font-size: 15px; font-weight: 500; }
+.ghin-num     { color: var(--text-2); font-size: 12px; }
+.hi-value     { font-weight: 600; }
+.ch-value     { font-weight: 700; font-size: 16px; color: var(--accent-lt); }
 
-.player-name { font-size: 15px; font-weight: 500; }
-
-.ghin-num { color: var(--text-2); font-size: 12px; }
-
-.hi-value { font-weight: 600; }
-
-.ch-value {
+/* ── Confirmed pill ─────────────────────────────────────────────────────── */
+.pill {
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 11px;
   font-weight: 700;
-  font-size: 16px;
-  color: var(--accent-lt);
+  letter-spacing: 0.05em;
+  padding: 0.2em 0.7em;
+  text-transform: uppercase;
+}
+.pill-yes {
+  background: var(--conf-bg);
+  color: var(--conf-txt);
+}
+.pill-no {
+  background: var(--pend-bg);
+  color: var(--pend-txt);
 }
 
 /* ── Footer ─────────────────────────────────────────────────────────────── */
@@ -231,12 +207,10 @@ td.num { text-align: right; }
   gap: 0.4rem 2rem;
 }
 
-/* ── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .page-header, .controls, .table-wrap, .footer { padding-left: 1rem; padding-right: 1rem; }
   .ghin-col { display: none; }
 }
-
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -258,9 +232,9 @@ td.num { text-align: right; }
   <div class="sort-btns">
     <button class="sort-btn active" onclick="sortTable('hcp', this)">Handicap</button>
     <button class="sort-btn" onclick="sortTable('name', this)">Name</button>
-    <button class="sort-btn" onclick="sortTable('hi', this)">Index</button>
+    <button class="sort-btn" onclick="sortTable('confirmed', this)">Confirmed</button>
   </div>
-  <span class="player-count">17 players</span>
+  <div class="summary" id="summary"></div>
 </div>
 
 <div class="table-wrap">
@@ -272,6 +246,7 @@ td.num { text-align: right; }
         <th class="ghin-col">GHIN</th>
         <th class="num">HI</th>
         <th class="num">Course HC</th>
+        <th class="center">Confirmed</th>
       </tr>
     </thead>
     <tbody id="tbody"></tbody>
@@ -285,23 +260,23 @@ td.num { text-align: right; }
 
 <script>
 const PLAYERS = [
-  { name: "Matt Ruess",      ghin: "10189718", hi:  4.8, hcp:  5 },
-  { name: "Chris Blaylock",  ghin: "10189771", hi: 11.5, hcp: 12 },
-  { name: "Dan Sherman",     ghin: "10189450", hi:  8.1, hcp:  9 },
-  { name: "David Franklin",  ghin: "10189789", hi:  7.2, hcp:  7 },
-  { name: "Joel Hanger",     ghin: "10189630", hi:  1.8, hcp:  1 },
-{ name: "Mike Bauner",     ghin: "3193186",  hi:  4.3, hcp:  4 },
-  { name: "Kyle Bauner",     ghin: "12981287", hi: 11.0, hcp: 12 },
-  { name: "Ken Goad",        ghin: "12706129", hi: 12.3, hcp: 13 },
-  { name: "Hunter Smith",    ghin: "12270584", hi:  4.8, hcp:  5 },
-  { name: "Kevin Livesay",   ghin: "10288717", hi:  9.8, hcp: 10 },
-  { name: "Kevin Babcock",   ghin: "10189777", hi:  5.3, hcp:  5 },
-  { name: "Scott Yoder",     ghin: "11135860", hi: 12.4, hcp: 13 },
-  { name: "Parke Callham",   ghin: "11837227", hi:  5.6, hcp:  6 },
-  { name: "Robert Scott Jr", ghin: "10189703", hi: 20.9, hcp: 23 },
-  { name: "Sean Granger",    ghin: "10193174", hi: 17.8, hcp: 19 },
-  { name: "Matt Bruder",     ghin: "10640059", hi: 13.9, hcp: 15 },
-  { name: "Matt Mosak",      ghin: "11254357", hi:  9.9, hcp: 11 },
+  { name: "Matt Ruess",      ghin: "10189718", hi:  4.8, hcp:  5, confirmed: true  },
+  { name: "Chris Blaylock",  ghin: "10189771", hi: 11.5, hcp: 12, confirmed: true  },
+  { name: "Dan Sherman",     ghin: "10189450", hi:  8.1, hcp:  9, confirmed: true  },
+  { name: "David Franklin",  ghin: "10189789", hi:  7.2, hcp:  7, confirmed: true  },
+  { name: "Joel Hanger",     ghin: "10189630", hi:  1.8, hcp:  1, confirmed: true  },
+  { name: "Mike Bauner",     ghin: "3193186",  hi:  4.3, hcp:  4, confirmed: true  },
+  { name: "Kyle Bauner",     ghin: "12981287", hi: 11.0, hcp: 12, confirmed: true  },
+  { name: "Ken Goad",        ghin: "12706129", hi: 12.3, hcp: 13, confirmed: false },
+  { name: "Hunter Smith",    ghin: "12270584", hi:  4.8, hcp:  5, confirmed: false },
+  { name: "Kevin Livesay",   ghin: "10288717", hi:  9.8, hcp: 10, confirmed: true  },
+  { name: "Kevin Babcock",   ghin: "10189777", hi:  5.3, hcp:  5, confirmed: false },
+  { name: "Scott Yoder",     ghin: "11135860", hi: 12.4, hcp: 13, confirmed: true  },
+  { name: "Parke Callham",   ghin: "11837227", hi:  5.6, hcp:  6, confirmed: true  },
+  { name: "Robert Scott Jr", ghin: "10189703", hi: 20.9, hcp: 23, confirmed: true  },
+  { name: "Sean Granger",    ghin: "10193174", hi: 17.8, hcp: 19, confirmed: true  },
+  { name: "Matt Bruder",     ghin: "10640059", hi: 13.9, hcp: 15, confirmed: true  },
+  { name: "Matt Mosak",      ghin: "11254357", hi:  9.9, hcp: 11, confirmed: true  },
 ];
 
 let currentSort = 'hcp';
@@ -315,9 +290,9 @@ function sortTable(by, btn) {
 
 function render() {
   const sorted = [...PLAYERS].sort((a, b) => {
-    if (currentSort === 'hcp')  return a.hcp - b.hcp;
-    if (currentSort === 'hi')   return a.hi  - b.hi;
-    if (currentSort === 'name') return a.name.localeCompare(b.name);
+    if (currentSort === 'hcp')       return a.hcp - b.hcp;
+    if (currentSort === 'name')      return a.name.localeCompare(b.name);
+    if (currentSort === 'confirmed') return (b.confirmed ? 1 : 0) - (a.confirmed ? 1 : 0);
     return 0;
   });
 
@@ -331,9 +306,16 @@ function render() {
       <td class="ghin-col ghin-num">${p.ghin}</td>
       <td class="num hi-value">${p.hi.toFixed(1)}</td>
       <td class="num ch-value">${p.hcp}</td>
+      <td class="center"><span class="pill ${p.confirmed ? 'pill-yes' : 'pill-no'}">${p.confirmed ? 'Yes' : 'Pending'}</span></td>
     `;
     tbody.appendChild(tr);
   });
+
+  const confirmed = PLAYERS.filter(p => p.confirmed).length;
+  const pending   = PLAYERS.length - confirmed;
+  document.getElementById('summary').innerHTML =
+    `<span class="summary-conf">${confirmed} confirmed</span>
+     <span class="summary-pend">${pending} pending</span>`;
 }
 
 render();
