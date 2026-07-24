@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Pairings — Youche CC Saturday Game</title>
+<style>
+:root {
+  --ground:      #F4F6F1;
+  --surface:     #FFFFFF;
+  --accent:      #1E5C1E;
+  --accent-dark: #153E15;
+  --text:        #192318;
+  --text-2:      #4A5E44;
+  --border:      #BDD0BD;
+  --row-yds:     #EDF3ED;
+  --row-par:     #D6EAD6;
+  --row-si:      #F4F6F1;
+  --col-total:   #E4EEE4;
+  --dot-color:   #1E5C1E;
+  --player-b:    #F8FAF6;
+  --stat-bg:     #FFFFFF;
+  --warn-bg:     #FFF8E6;
+  --warn-bd:     #D4AA40;
+  --warn-txt:    #6B4F00;
+  --good-bg:     #EAF4EA;
+  --good-bd:     #4A904A;
+  --good-txt:    #1A5C1A;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground:      #111A11;
+    --surface:     #182118;
+    --accent:      #5DA85D;
+    --accent-dark: #3D7A3D;
+    --text:        #DDE8D5;
+    --text-2:      #849C7A;
+    --border:      #2E3E2E;
+    --row-yds:     #192419;
+    --row-par:     #1E2E1E;
+    --row-si:      #161E16;
+    --col-total:   #1C2C1C;
+    --dot-color:   #7AC87A;
+    --player-b:    #1A251A;
+    --stat-bg:     #182118;
+    --warn-bg:     #2A2210;
+    --warn-bd:     #8C7020;
+    --warn-txt:    #D4AA40;
+    --good-bg:     #152515;
+    --good-bd:     #3D7A3D;
+    --good-txt:    #6DCF6D;
+  }
+}
+:root[data-theme="light"] {
+  --ground:#F4F6F1;--surface:#FFFFFF;--accent:#1E5C1E;--accent-dark:#153E15;
+  --text:#192318;--text-2:#4A5E44;--border:#BDD0BD;--row-yds:#EDF3ED;
+  --row-par:#D6EAD6;--row-si:#F4F6F1;--col-total:#E4EEE4;--dot-color:#1E5C1E;--player-b:#F8FAF6;
+  --stat-bg:#FFFFFF;--warn-bg:#FFF8E6;--warn-bd:#D4AA40;--warn-txt:#6B4F00;
+  --good-bg:#EAF4EA;--good-bd:#4A904A;--good-txt:#1A5C1A;
+}
+:root[data-theme="dark"] {
+  --ground:#111A11;--surface:#182118;--accent:#5DA85D;--accent-dark:#3D7A3D;
+  --text:#DDE8D5;--text-2:#849C7A;--border:#2E3E2E;--row-yds:#192419;
+  --row-par:#1E2E1E;--row-si:#161E16;--col-total:#1C2C1C;--dot-color:#7AC87A;--player-b:#1A251A;
+  --stat-bg:#182118;--warn-bg:#2A2210;--warn-bd:#8C7020;--warn-txt:#D4AA40;
+  --good-bg:#152515;--good-bd:#3D7A3D;--good-txt:#6DCF6D;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--ground);
+  color: var(--text);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  padding-bottom: 3rem;
+}
+
+.page-header {
+  background: var(--accent);
+  color: #fff;
+  padding: 1.5rem 2rem 1.25rem;
+}
+.page-header a {
+  font-size: 12px; opacity: 0.75; color: #fff;
+  text-decoration: none; display: inline-block; margin-bottom: 0.4rem;
+}
+.page-header a:hover { opacity: 1; }
+.page-header h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.7rem; font-weight: normal;
+}
+.page-header p { font-size: 13px; opacity: 0.8; margin-top: 0.3rem; }
+.header-actions {
+  margin-top: 0.75rem;
+  display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;
+}
+.btn {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 3px; color: #fff;
+  cursor: pointer; font-size: 12px;
+  padding: 0.35em 1em;
+  transition: background 0.1s;
+}
+.btn:hover { background: rgba(255,255,255,0.28); }
+.btn-primary {
+  background: rgba(255,255,255,0.9);
+  color: var(--accent); font-weight: 600;
+  border-color: transparent;
+}
+.btn-primary:hover { background: #fff; }
+
+/* ── Stats bar ───────────────────────────────────────────────────────────── */
+.stats-bar {
+  background: var(--stat-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.stat { display: flex; flex-direction: column; gap: 2px; }
+.stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-2); }
+.stat-value { font-size: 18px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.stat-compare { font-size: 11px; color: var(--text-2); }
+
+.fairness-pill {
+  margin-left: auto;
+  border-radius: 3px;
+  border-left: 3px solid;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0.4em 0.8em;
+}
+.pill-good { background: var(--good-bg); border-color: var(--good-bd); color: var(--good-txt); }
+.pill-warn { background: var(--warn-bg); border-color: var(--warn-bd); color: var(--warn-txt); }
+
+/* ── Scorecard sections ──────────────────────────────────────────────────── */
+.sc-section { padding: 1.25rem 1.5rem 0; }
+
+.sc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.sc-header {
+  background: var(--accent);
+  color: #fff;
+  padding: 0.55rem 1rem;
+  display: flex; align-items: baseline;
+  flex-wrap: wrap; gap: 0.4rem 1rem;
+}
+.sc-header .t-num { font-family: Georgia, serif; font-size: 1rem; font-weight: normal; }
+.sc-header .t-names { font-size: 14px; font-weight: 600; }
+.sc-header .t-hc { margin-left: auto; font-size: 11px; opacity: 0.8; white-space: nowrap; }
+
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ── Scorecard table ─────────────────────────────────────────────────────── */
+table.sc {
+  border-collapse: collapse;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  width: 100%;
+}
+table.sc td, table.sc th {
+  border: 1px solid var(--border);
+  text-align: center; vertical-align: middle; padding: 0;
+}
+.lbl {
+  text-align: left !important; padding: 0 8px !important;
+  min-width: 108px; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-2);
+}
+tr.r-hole td, tr.r-hole th {
+  background: var(--accent-dark); color: #fff;
+  font-weight: 700; font-size: 12px; height: 24px; min-width: 30px;
+}
+tr.r-hole .tot { background: var(--accent); }
+tr.r-yds td, tr.r-yds th { background: var(--row-yds); height: 20px; font-size: 11px; color: var(--text-2); }
+tr.r-yds .tot { background: var(--col-total); font-weight: 700; color: var(--text); }
+tr.r-par td, tr.r-par th { background: var(--row-par); height: 24px; font-weight: 700; font-size: 14px; }
+tr.r-par .tot { background: var(--col-total); font-weight: 700; }
+tr.r-si td, tr.r-si th { background: var(--row-si); height: 18px; font-size: 10px; color: var(--text-2); }
+tr.r-si .tot { background: var(--col-total); }
+tr.r-player { height: 52px; }
+tr.r-player.pb { background: var(--player-b); }
+tr.r-player th.lbl { padding: 4px 8px !important; text-transform: none; letter-spacing: 0; }
+.p-name { font-size: 12px; font-weight: 700; color: var(--text); }
+.p-hc   { font-size: 10px; color: var(--text-2); font-weight: 400; margin-top: 1px; }
+tr.r-player td { width: 32px; min-width: 28px; padding: 0; }
+tr.r-player td.tot { background: var(--col-total); }
+.pc { display: flex; flex-direction: column; height: 52px; }
+.dots {
+  height: 18px; display: flex; align-items: center; justify-content: center;
+  border-bottom: 1px solid var(--border);
+  background: rgba(30,92,30,0.06);
+  font-size: 8px; color: var(--dot-color); letter-spacing: -0.5px; font-weight: 900;
+}
+.dots.d1::before { content: '●'; }
+.dots.d2::before { content: '●●'; }
+.score { flex: 1; display: flex; align-items: center; justify-content: center; }
+.score input {
+  width: 100%; height: 100%; border: none; background: transparent;
+  text-align: center; font-size: 14px; font-weight: 600; color: var(--text);
+  outline: none; cursor: text;
+}
+.score input:focus { background: rgba(30,92,30,0.07); }
+td.tot .pc { background: var(--col-total); }
+td.tot .dots { background: rgba(30,92,30,0.1); }
+
+.legend {
+  display: flex; gap: 1.5rem; padding: 0.5rem 1rem;
+  font-size: 11px; color: var(--text-2);
+  border-top: 1px solid var(--border); background: var(--row-si); flex-wrap: wrap;
+}
+.legend-dot { font-size: 9px; color: var(--dot-color); font-weight: 900; }
+
+@media print {
+  @page { size: letter landscape; margin: 0.4in; }
+  .page-header, .header-actions, .stats-bar { display: none; }
+  .sc-section { padding: 0; page-break-after: always; }
+  .sc-section:last-child { page-break-after: avoid; }
+  body { background: white; }
+  .sc-card { border: 1px solid #999; }
+  .sc-header { background: #1E5C1E !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  tr.r-hole td, tr.r-hole th { background: #153E15 !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  tr.r-par td, tr.r-par th { background: #D6EAD6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .dots { background: #edf6ed !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  tr.r-yds td, tr.r-yds th { background: #edf3ed !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .tot { background: #e4eee4 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+@media (max-width: 600px) {
+  .sc-section { padding: 1rem 0.5rem 0; }
+  .page-header, .stats-bar { padding-left: 1rem; padding-right: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <a href="index.html">← Saturday Game roster</a>
+  <h1>Random Pairings</h1>
+  <p>Youche Country Club — White Tees &nbsp;·&nbsp; July 26, 2026 &nbsp;·&nbsp; Rating 70.4 · Slope 127 · Par 71</p>
+  <div class="header-actions">
+    <button class="btn btn-primary" onclick="reshuffle()">⇄ Reshuffle</button>
+    <button class="btn" onclick="window.print()">Print scorecards</button>
+  </div>
+</div>
+
+<div class="stats-bar" id="stats-bar"></div>
+<div id="root"></div>
+
+<script>
+const HOLES = [
+  { n:1,  par:5, yds:507, si:4  },
+  { n:2,  par:3, yds:152, si:14 },
+  { n:3,  par:5, yds:495, si:12 },
+  { n:4,  par:3, yds:138, si:18 },
+  { n:5,  par:5, yds:460, si:10 },
+  { n:6,  par:4, yds:366, si:2  },
+  { n:7,  par:4, yds:370, si:6  },
+  { n:8,  par:4, yds:340, si:8  },
+  { n:9,  par:3, yds:162, si:16 },
+  { n:10, par:4, yds:354, si:15 },
+  { n:11, par:3, yds:152, si:17 },
+  { n:12, par:4, yds:412, si:3  },
+  { n:13, par:4, yds:424, si:5  },
+  { n:14, par:3, yds:185, si:11 },
+  { n:15, par:4, yds:371, si:13 },
+  { n:16, par:4, yds:359, si:1  },
+  { n:17, par:4, yds:380, si:9  },
+  { n:18, par:5, yds:580, si:7  },
+];
+
+const PLAYERS = [
+  { name:'Joel Hanger',     ch:1  },
+  { name:'Mike Bauner',     ch:4  },
+  { name:'Matt Ruess',      ch:5  },
+  { name:'Hunter Smith',    ch:5  },
+  { name:'Kevin Babcock',   ch:5  },
+  { name:'Parke Callham',   ch:6  },
+  { name:'David Franklin',  ch:7  },
+  { name:'Dan Sherman',     ch:9  },
+  { name:'Kevin Livesay',   ch:10 },
+  { name:'Matt Mosak',      ch:11 },
+  { name:'Chris Blaylock',  ch:12 },
+  { name:'Kyle Bauner',     ch:12 },
+  { name:'Scott Yoder',     ch:13 },
+  { name:'Matt Bruder',     ch:15 },
+  { name:'Sean Granger',    ch:19 },
+  { name:'Robert Scott Jr', ch:23 },
+];
+
+const HL_STDDEV = 2.56; // high-low baseline
+
+const F = HOLES.slice(0,9), B = HOLES.slice(9);
+const OUT_PAR = F.reduce((s,h)=>s+h.par,0);
+const IN_PAR  = B.reduce((s,h)=>s+h.par,0);
+const OUT_YDS = F.reduce((s,h)=>s+h.yds,0);
+const IN_YDS  = B.reduce((s,h)=>s+h.yds,0);
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function stddev(vals) {
+  const mean = vals.reduce((s,v)=>s+v,0) / vals.length;
+  return Math.sqrt(vals.reduce((s,v)=>s+(v-mean)**2,0) / vals.length);
+}
+
+function dots(ch, si) {
+  if (ch <= 0) return 0;
+  if (ch > 18) return si <= (ch-18) ? 2 : 1;
+  return si <= ch ? 1 : 0;
+}
+
+function buildCard(team) {
+  let rH = `<tr class="r-hole"><th class="lbl">HOLE</th>`;
+  F.forEach(h => rH += `<td>${h.n}</td>`);
+  rH += `<th class="tot">OUT</th>`;
+  B.forEach(h => rH += `<td>${h.n}</td>`);
+  rH += `<th class="tot">IN</th><th class="tot">TOT</th></tr>`;
+
+  let rY = `<tr class="r-yds"><th class="lbl">Yards</th>`;
+  F.forEach(h => rY += `<td>${h.yds}</td>`);
+  rY += `<td class="tot">${OUT_YDS}</td>`;
+  B.forEach(h => rY += `<td>${h.yds}</td>`);
+  rY += `<td class="tot">${IN_YDS}</td><td class="tot">${OUT_YDS+IN_YDS}</td></tr>`;
+
+  let rP = `<tr class="r-par"><th class="lbl">Par</th>`;
+  F.forEach(h => rP += `<td>${h.par}</td>`);
+  rP += `<td class="tot">${OUT_PAR}</td>`;
+  B.forEach(h => rP += `<td>${h.par}</td>`);
+  rP += `<td class="tot">${IN_PAR}</td><td class="tot">${OUT_PAR+IN_PAR}</td></tr>`;
+
+  let rS = `<tr class="r-si"><th class="lbl">Stroke Index</th>`;
+  F.forEach(h => rS += `<td>${h.si}</td>`);
+  rS += `<td class="tot"></td>`;
+  B.forEach(h => rS += `<td>${h.si}</td>`);
+  rS += `<td class="tot"></td><td class="tot"></td></tr>`;
+
+  const playerRows = team.p.map((p, pi) => {
+    const cls = pi === 1 ? 'r-player pb' : 'r-player';
+    let outD = 0, inD = 0;
+    const mkCell = (h, side) => {
+      const d = dots(p.ch, h.si);
+      if (side==='F') outD+=d; else inD+=d;
+      const dc = d===2?'d2':d===1?'d1':'';
+      return `<td><div class="pc"><div class="dots ${dc}"></div><div class="score"><input type="text" maxlength="2" aria-label="H${h.n} ${p.name}"></div></div></td>`;
+    };
+    let r = `<tr class="${cls}"><th class="lbl"><div class="p-name">${p.name}</div><div class="p-hc">Course HC: ${p.ch}</div></th>`;
+    F.forEach(h => r += mkCell(h,'F'));
+    r += `<td class="tot"><div class="pc"><div class="dots"></div><div class="score"><input type="text" maxlength="3" aria-label="OUT ${p.name}"></div></div></td>`;
+    B.forEach(h => r += mkCell(h,'B'));
+    r += `<td class="tot"><div class="pc"><div class="dots"></div><div class="score"><input type="text" maxlength="3" aria-label="IN ${p.name}"></div></div></td>`;
+    const td = outD+inD;
+    r += `<td class="tot"><div class="pc"><div class="dots" style="font-size:8px;color:var(--dot-color);font-weight:700;">${td>0?td+'●':''}</div><div class="score"><input type="text" maxlength="3" aria-label="TOT ${p.name}"></div></div></td></tr>`;
+    return r;
+  }).join('');
+
+  const combined = team.p[0].ch + team.p[1].ch;
+  return `<div class="sc-section"><div class="sc-card">
+    <div class="sc-header">
+      <span class="t-num">Team ${team.n}</span>
+      <span class="t-names">${team.p[0].name} &amp; ${team.p[1].name}</span>
+      <span class="t-hc">Combined HC ${combined}</span>
+    </div>
+    <div class="table-wrap"><table class="sc" aria-label="Team ${team.n} scorecard"><tbody>
+      ${rH}${rY}${rP}${rS}${playerRows}
+    </tbody></table></div>
+    <div class="legend">
+      <span style="display:flex;align-items:center;gap:0.35rem;"><span class="legend-dot">●</span> 1 stroke received</span>
+      <span style="display:flex;align-items:center;gap:0.35rem;"><span class="legend-dot">●●</span> 2 strokes received</span>
+      <span style="margin-left:auto;font-style:italic;">${team.p[0].name}: ${team.p[0].ch} strokes &nbsp;·&nbsp; ${team.p[1].name}: ${team.p[1].ch} strokes</span>
+    </div>
+  </div></div>`;
+}
+
+function reshuffle() {
+  const shuffled = shuffle(PLAYERS);
+  const teams = Array.from({length:8}, (_,i) => ({
+    n: i+1,
+    p: [shuffled[i*2], shuffled[i*2+1]]
+  }));
+
+  const totals = teams.map(t => t.p[0].ch + t.p[1].ch);
+  const mean   = totals.reduce((s,v)=>s+v,0) / totals.length;
+  const sd     = stddev(totals);
+  const range  = Math.max(...totals) - Math.min(...totals);
+  const fairer = sd < HL_STDDEV;
+
+  document.getElementById('root').innerHTML = teams.map(buildCard).join('');
+
+  const pill = fairer
+    ? `<span class="fairness-pill pill-good">More balanced than High-Low (σ ${sd.toFixed(2)} vs ${HL_STDDEV})</span>`
+    : `<span class="fairness-pill pill-warn">Less balanced than High-Low (σ ${sd.toFixed(2)} vs ${HL_STDDEV})</span>`;
+
+  document.getElementById('stats-bar').innerHTML = `
+    <div class="stat">
+      <span class="stat-label">Avg combined HC</span>
+      <span class="stat-value">${mean.toFixed(1)}</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Std deviation</span>
+      <span class="stat-value">${sd.toFixed(2)}</span>
+      <span class="stat-compare">High-Low: ${HL_STDDEV}</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Range (lo–hi)</span>
+      <span class="stat-value">${Math.min(...totals)}–${Math.max(...totals)}</span>
+      <span class="stat-compare">High-Low: 17–24</span>
+    </div>
+    ${pill}`;
+}
+
+reshuffle();
+</script>
+</body>
+</html>
