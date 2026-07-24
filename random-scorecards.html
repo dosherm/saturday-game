@@ -137,8 +137,38 @@ body {
 .pill-good { background: var(--good-bg); border-color: var(--good-bd); color: var(--good-txt); }
 .pill-warn { background: var(--warn-bg); border-color: var(--warn-bd); color: var(--warn-txt); }
 
+/* ── Tee time dividers ───────────────────────────────────────────────────── */
+.tee-group { margin-top: 1.5rem; }
+.tee-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.55rem 1.5rem;
+  background: var(--surface);
+  border-top: 2px solid var(--accent);
+  border-bottom: 1px solid var(--border);
+  margin: 0 1.5rem;
+}
+.tee-time {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+.tee-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.tee-who {
+  font-size: 12px;
+  color: var(--text-2);
+  margin-left: 0.5rem;
+}
+
 /* ── Scorecard sections ──────────────────────────────────────────────────── */
-.sc-section { padding: 1.25rem 1.5rem 0; }
+.sc-section { padding: 0.75rem 1.5rem 0; }
 
 .sc-card {
   background: var(--surface);
@@ -223,8 +253,10 @@ td.tot .dots { background: rgba(30,92,30,0.1); }
 @media print {
   @page { size: letter landscape; margin: 0.4in; }
   .page-header, .header-actions, .stats-bar { display: none; }
-  .sc-section { padding: 0; page-break-after: always; }
-  .sc-section:last-child { page-break-after: avoid; }
+  .tee-group { page-break-after: always; margin-top: 0; }
+  .tee-group:last-child { page-break-after: avoid; }
+  .tee-divider { margin: 0 0 0.5rem; }
+  .sc-section { padding: 0 0 0.5rem; }
   body { background: white; }
   .sc-card { border: 1px solid #999; }
   .sc-header { background: #1E5C1E !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -400,7 +432,24 @@ function reshuffle() {
   const range  = Math.max(...totals) - Math.min(...totals);
   const fairer = sd < HL_STDDEV;
 
-  document.getElementById('root').innerHTML = teams.map(buildCard).join('');
+  const TEE_GROUPS = [
+    { time: '7:10 AM', idx: [0, 6] },
+    { time: '7:20 AM', idx: [2, 3] },
+    { time: '7:30 AM', idx: [1, 4] },
+    { time: '7:40 AM', idx: [5, 7] },
+  ];
+  document.getElementById('root').innerHTML = TEE_GROUPS.map(g => {
+    const t0 = teams[g.idx[0]], t1 = teams[g.idx[1]];
+    const who = `Team ${t0.n} &amp; Team ${t1.n}`;
+    return `<div class="tee-group">
+      <div class="tee-divider">
+        <span class="tee-label">Tee Time</span>
+        <span class="tee-time">${g.time}</span>
+        <span class="tee-who">${who}</span>
+      </div>
+      ${buildCard(t0)}${buildCard(t1)}
+    </div>`;
+  }).join('');
 
   const pill = fairer
     ? `<span class="fairness-pill pill-good">More balanced than High-Low (σ ${sd.toFixed(2)} vs ${HL_STDDEV})</span>`
